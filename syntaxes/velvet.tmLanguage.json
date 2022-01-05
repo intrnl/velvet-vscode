@@ -801,8 +801,8 @@
 					"name": "punctuation.definition.variable.velvet"
 				},
 				{
-					"match": "(?<![_$[:alnum:]])(\\$\\$)(?=root|host)",
-					"name": "punctuation.definition.variable.velvet"
+					"match": "(?<![_$[:alnum:]])(\\$\\$)(root|host)",
+					"name": "variable.other.constant"
 				}
 			]
 		}
