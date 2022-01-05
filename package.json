@@ -2,6 +2,7 @@
 	"name": "velvet-language-support",
 	"displayName": "Velvet Language Support",
 	"description": "Adds language support for Velvet",
+	"publisher": "intrnl",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.63.0"
