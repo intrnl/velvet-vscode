@@ -401,12 +401,7 @@
 							"name": "punctuation.definition.string.end.velvet"
 						}
 					},
-					"name": "string.quoted.velvet",
-					"patterns": [
-						{
-							"include": "#interpolation"
-						}
-					]
+					"name": "string.quoted.velvet"
 				}
 			]
 		},
