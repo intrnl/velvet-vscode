@@ -78,14 +78,11 @@
 		"interpolation": {
 			"patterns": [
 				{
-					"begin": "(\\{)(@[a-z]+\\s+)?",
+					"begin": "\\{",
 					"end": "\\}",
 					"beginCaptures": {
-						"1": {
+						"0": {
 							"name": "punctuation.section.embedded.begin.velvet"
-						},
-						"2": {
-							"name": "keyword.other.debugger.velvet"
 						}
 					},
 					"endCaptures": {
@@ -108,15 +105,45 @@
 					"include": "#special-tags-void"
 				},
 				{
-					"include": "#special-tags-block-begin"
+					"include": "#special-tags-intermediary"
 				},
 				{
-					"include": "#special-tags-block-end"
+					"include": "#special-tags-begin"
+				},
+				{
+					"include": "#special-tags-end"
 				}
 			]
 		},
-		"special-tags-keywords": {
-			"match": "([#/:])(else\\s+if|[a-z]*)",
+		"special-tags-void": {
+			"begin": "({)\\s*(@([a-z]+))",
+			"end": "(})",
+			"name": "meta.special.$3.velvet meta.special.start.velvet",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.block.begin.velvet"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "#special-tags-void-keywords"
+						}
+					]
+				}
+			},
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.block.end.velvet"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#special-tags-void-modes"
+				}
+			]
+		},
+		"special-tags-void-keywords": {
+			"match": "(@)([a-z]*)",
 			"captures": {
 				"1": {
 					"name": "keyword.punctuation.definition.keyword.velvet"
@@ -124,25 +151,143 @@
 				"2": {
 					"patterns": [
 						{
-							"match": "if|else\\s+if|else",
+							"match": "\\blog\\b",
+							"name": "keyword.other.debugger.velvet"
+						}
+					]
+				}
+			}
+		},
+		"special-tags-void-modes": {
+			"patterns": [
+				{
+					"begin": "(?<=log.*?)\\G",
+					"end": "(?=})",
+					"name": "meta.embedded.expression.velvet source.ts",
+					"patterns": [
+						{
+							"include": "source.ts"
+						}
+					]
+				}
+			]
+		},
+		"special-tags-intermediary": {
+			"begin": "({)\\s*(:(else\\s+if|[a-z]*))",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.block.begin.velvet"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "#special-tags-intermediary-keywords"
+						}
+					]
+				}
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.block.end.velvet"
+				}
+			},
+			"name": "meta.special.$3.velvet",
+			"patterns": [
+				{
+					"include": "#special-tags-intermediary-modes"
+				}
+			]
+		},
+		"special-tags-intermediary-keywords": {
+			"match": "(:)(else\\s+if|[a-z]*)",
+			"captures": {
+				"1": {
+					"name": "keyword.punctuation.definition.keyword.velvet"
+				},
+				"2": {
+					"patterns": [
+						{
+							"match": "\\b(?:else\\s+if|else)\\b",
 							"name": "keyword.control.conditional.velvet"
 						},
 						{
-							"match": "each|key",
-							"name": "keyword.control.velvet"
-						},
-						{
-							"match": "await|then|catch",
+							"match": "\\b(?:then|catch)\\b",
 							"name": "keyword.control.flow.velvet"
 						}
 					]
 				}
 			}
 		},
-		"special-tags-modes": {
+		"special-tags-intermediary-modes": {
 			"patterns": [
 				{
-					"begin": "(?<=(if|key|then|catch|log).*?)\\G",
+					"begin": "(?<=(else\\s+if|then|catch).*?)\\G",
+					"end": "(?=})",
+					"name": "meta.embedded.expression.velvet source.ts",
+					"patterns": [
+						{
+							"include": "source.ts"
+						}
+					]
+				}
+			]
+		},
+		"special-tags-begin": {
+			"begin": "({)\\s*(#([a-z]*))",
+			"end": "(})",
+			"name": "meta.special.$3.velvet meta.special.start.velvet",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.block.begin.velvet"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "#special-tags-block-keywords"
+						}
+					]
+				}
+			},
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.block.end.velvet"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#special-tags-begin-modes"
+				}
+			]
+		},
+		"special-tags-block-keywords": {
+			"match": "([#/])([a-z]*)",
+			"captures": {
+				"1": {
+					"name": "keyword.punctuation.definition.keyword.velvet"
+				},
+				"2": {
+					"patterns": [
+						{
+							"match": "\\b(?:if)\\b",
+							"name": "keyword.control.conditional.velvet"
+						},
+						{
+							"match": "\\b(?:each|key)\\b",
+							"name": "keyword.control.velvet"
+						},
+						{
+							"match": "\\b(?:await)\\b",
+							"name": "keyword.control.flow.velvet"
+						}
+					]
+				}
+			}
+		},
+		"special-tags-begin-modes": {
+			"patterns": [
+				{
+					"begin": "(?<=(if|key).*?)\\G",
 					"end": "(?=})",
 					"name": "meta.embedded.expression.velvet source.ts",
 					"patterns": [
@@ -239,61 +384,7 @@
 				}
 			]
 		},
-		"special-tags-void": {
-			"begin": "({)\\s*((?::)(else\\s+if|[a-z]*))",
-			"beginCaptures": {
-				"1": {
-					"name": "punctuation.definition.block.begin.velvet"
-				},
-				"2": {
-					"patterns": [
-						{
-							"include": "#special-tags-keywords"
-						}
-					]
-				}
-			},
-			"end": "\\}",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.definition.block.end.velvet"
-				}
-			},
-			"name": "meta.special.$3.velvet",
-			"patterns": [
-				{
-					"include": "#special-tags-modes"
-				}
-			]
-		},
-		"special-tags-block-begin": {
-			"begin": "({)\\s*(#([a-z]*))",
-			"end": "(})",
-			"name": "meta.special.$3.velvet meta.special.start.velvet",
-			"beginCaptures": {
-				"1": {
-					"name": "punctuation.definition.block.begin.velvet"
-				},
-				"2": {
-					"patterns": [
-						{
-							"include": "#special-tags-keywords"
-						}
-					]
-				}
-			},
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.definition.block.end.velvet"
-				}
-			},
-			"patterns": [
-				{
-					"include": "#special-tags-modes"
-				}
-			]
-		},
-		"special-tags-block-end": {
+		"special-tags-end": {
 			"begin": "({)\\s*(/([a-z]*))",
 			"end": "(})",
 			"name": "meta.special.$3.velvet meta.special.end.velvet",
@@ -304,7 +395,7 @@
 				"2": {
 					"patterns": [
 						{
-							"include": "#special-tags-keywords"
+							"include": "#special-tags-block-keywords"
 						}
 					]
 				}
