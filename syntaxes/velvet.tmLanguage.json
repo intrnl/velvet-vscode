@@ -153,6 +153,10 @@
 						{
 							"match": "\\blog\\b",
 							"name": "keyword.other.debugger.velvet"
+						},
+						{
+							"match": "\\blet\\b",
+							"name": "storage.type.velvet"
 						}
 					]
 				}
@@ -162,6 +166,16 @@
 			"patterns": [
 				{
 					"begin": "(?<=log.*?)\\G",
+					"end": "(?=})",
+					"name": "meta.embedded.expression.velvet source.ts",
+					"patterns": [
+						{
+							"include": "source.ts"
+						}
+					]
+				},
+				{
+					"begin": "(?<=let.*?)\\G",
 					"end": "(?=})",
 					"name": "meta.embedded.expression.velvet source.ts",
 					"patterns": [
