@@ -641,7 +641,7 @@
 		},
 		"tags-lang": {
 			"begin": "<(script|style)",
-			"end": "</\\1\\s*>|/>",
+			"end": "</\\1>|/>",
 			"beginCaptures": {
 				"0": {
 					"patterns": [
